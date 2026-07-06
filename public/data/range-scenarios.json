@@ -1,0 +1,101 @@
+{
+  "_meta": {
+    "description": "Authored range-reading scenarios. The user multi-selects from `options`; `correctAnswers` is the subset that belongs in the answer.",
+    "format": "0.05/0.10, 100bb"
+  },
+  "scenarios": [
+    {
+      "id": "range_001",
+      "title": "Button steal, flopped top pair",
+      "stakes": "0.05/0.10",
+      "players": 5,
+      "heroPosition": "BTN",
+      "heroCards": ["As", "Qs"],
+      "villainPosition": "BB",
+      "stackDepthBB": 100,
+      "preflopAction": ["UTG folds", "MP folds", "Hero raises 2.5bb", "SB folds", "BB calls"],
+      "flop": ["Qh", "9s", "6s"],
+      "question": {
+        "prompt": "You bet 1/3 pot with top pair. Which worse hands can call you?",
+        "options": ["QJ", "QT", "T9", "98s", "flush draws", "AA", "KK", "sets"],
+        "correctAnswers": ["QJ", "QT", "T9", "98s", "flush draws"],
+        "explanation": "Worse hands that call are weaker queens and draws (pairs + flush/straight draws). AA/KK are overpairs and sets are better than your top pair - they raise, they don't call as 'worse'."
+      }
+    },
+    {
+      "id": "range_002",
+      "title": "BB check-raises a dry king-high flop",
+      "stakes": "0.05/0.10",
+      "players": 6,
+      "heroPosition": "CO",
+      "heroCards": ["Ad", "Kd"],
+      "villainPosition": "BB",
+      "stackDepthBB": 100,
+      "preflopAction": ["Hero raises 2.5bb", "BTN folds", "SB folds", "BB calls"],
+      "flop": ["Kc", "8d", "2s"],
+      "question": {
+        "prompt": "BB check-raises your c-bet. Which hands make up a sensible check-raise range here?",
+        "options": ["88", "22", "K8s", "A2s", "sets", "KJ", "76s (bluff)", "JT (bluff)"],
+        "correctAnswers": ["88", "22", "K8s", "sets", "76s (bluff)", "JT (bluff)"],
+        "explanation": "A balanced check-raise range = value (sets 88/22, two pair K8s) plus a few bluffs with backdoor equity (76s, JT). A2s and unpaired KJ are typically just calls, not raises."
+      }
+    },
+    {
+      "id": "range_003",
+      "title": "Facing a 3-bet preflop",
+      "stakes": "0.05/0.10",
+      "players": 6,
+      "heroPosition": "BTN",
+      "heroCards": ["Ac", "Jc"],
+      "villainPosition": "SB",
+      "stackDepthBB": 100,
+      "preflopAction": ["Hero raises 2.5bb", "SB 3-bets to 10bb", "BB folds"],
+      "flop": [],
+      "question": {
+        "prompt": "Which hands make up the Small Blind's value 3-bet range?",
+        "options": ["AA", "KK", "QQ", "AKs", "AKo", "A5s (bluff)", "72o", "K9o"],
+        "correctAnswers": ["AA", "KK", "QQ", "AKs", "AKo"],
+        "explanation": "The value portion of a 3-bet range is premium pairs and big aces. A5s is a bluff (not value), and 72o/K9o are simply folds preflop."
+      }
+    },
+    {
+      "id": "range_004",
+      "title": "Wet board, villain leads turn",
+      "stakes": "0.05/0.10",
+      "players": 6,
+      "heroPosition": "CO",
+      "heroCards": ["Ah", "Ad"],
+      "villainPosition": "BB",
+      "stackDepthBB": 100,
+      "preflopAction": ["Hero raises 2.5bb", "BB calls"],
+      "flop": ["9s", "8s", "5c"],
+      "turn": ["7d"],
+      "question": {
+        "prompt": "The turn brings a straight card and BB leads out. Which better hands are now ahead of your overpair?",
+        "options": ["T6 (straight)", "J T (straight)", "sets", "two pair 98", "flush draws", "AK high"],
+        "correctAnswers": ["T6 (straight)", "J T (straight)", "sets", "two pair 98"],
+        "explanation": "On 9-8-5-7 many straights (T6, JT, 6x, T6) and two pair/sets now beat aces. Flush draws and AK high are still behind - they are not 'better hands'."
+      }
+    },
+    {
+      "id": "range_005",
+      "title": "River value bet targeting worse",
+      "stakes": "0.05/0.10",
+      "players": 6,
+      "heroPosition": "BTN",
+      "heroCards": ["Kh", "Qh"],
+      "villainPosition": "BB",
+      "stackDepthBB": 100,
+      "preflopAction": ["Hero raises 2.5bb", "BB calls"],
+      "flop": ["Qc", "7d", "2h"],
+      "turn": ["5s"],
+      "river": ["3c"],
+      "question": {
+        "prompt": "You have top pair good kicker on the river. Which worse hands call a half-pot value bet?",
+        "options": ["QJ", "QT", "77 (set)", "22 (set)", "A7", "77", "K7s", "AA"],
+        "correctAnswers": ["QJ", "QT", "A7", "K7s"],
+        "explanation": "Worse hands that call are weaker queens and pairs (QJ/QT/A7/K7). Sets (77/22) and AA are better than you - they raise or are already ahead, so they are not part of 'worse hands that call'."
+      }
+    }
+  ]
+}

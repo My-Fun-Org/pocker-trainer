@@ -1,0 +1,80 @@
+{
+  "_meta": {
+    "description": "Authored flop textures for the Board Texture trainer. texture is one of dry | wet | very-wet.",
+    "answers": ["dry", "wet", "very-wet"]
+  },
+  "scenarios": [
+    {
+      "id": "bt_001",
+      "flop": ["Ah", "7d", "2c"],
+      "texture": "dry",
+      "explanation": "Ace-high, rainbow, and disconnected. No flush draws and almost no straight draws - a classic dry board."
+    },
+    {
+      "id": "bt_002",
+      "flop": ["9c", "8d", "7s"],
+      "texture": "very-wet",
+      "explanation": "Three connected middle cards create made straights and a huge number of straight draws."
+    },
+    {
+      "id": "bt_003",
+      "flop": ["Qd", "Jd", "Td"],
+      "texture": "very-wet",
+      "explanation": "Monotone and tightly connected broadway cards - flushes are already possible plus every straight draw imaginable."
+    },
+    {
+      "id": "bt_004",
+      "flop": ["Ks", "7h", "2c"],
+      "texture": "dry",
+      "explanation": "King-high, rainbow, and disconnected. Very few draws connect with this board."
+    },
+    {
+      "id": "bt_005",
+      "flop": ["Kd", "Qd", "5s"],
+      "texture": "wet",
+      "explanation": "Two-tone with two broadway cards gives a flush draw and some straight draws, but the 5 keeps it from being fully coordinated."
+    },
+    {
+      "id": "bt_006",
+      "flop": ["Js", "Ts", "4h"],
+      "texture": "wet",
+      "explanation": "A two-tone board with connected broadways offers a flush draw plus straight draws around the J-T."
+    },
+    {
+      "id": "bt_007",
+      "flop": ["6s", "5s", "4h"],
+      "texture": "very-wet",
+      "explanation": "Two-tone and tightly connected - made straights, open-enders, gutshots and a flush draw all live here."
+    },
+    {
+      "id": "bt_008",
+      "flop": ["2c", "2d", "9h"],
+      "texture": "dry",
+      "explanation": "Paired and rainbow with no straight coordination - one of the driest boards possible."
+    },
+    {
+      "id": "bt_009",
+      "flop": ["Ah", "Kh", "Qh"],
+      "texture": "very-wet",
+      "explanation": "Monotone broadway board: flushes are made and many strong hands and draws connect."
+    },
+    {
+      "id": "bt_010",
+      "flop": ["9s", "5d", "2c"],
+      "texture": "dry",
+      "explanation": "Rainbow and disconnected low-to-mid cards. Hard for any range to connect strongly."
+    },
+    {
+      "id": "bt_011",
+      "flop": ["Ts", "9s", "4d"],
+      "texture": "wet",
+      "explanation": "Two-tone with two connected cards - a spade flush draw plus straight draws around T-9."
+    },
+    {
+      "id": "bt_012",
+      "flop": ["Kd", "8c", "3h"],
+      "texture": "dry",
+      "explanation": "Rainbow with a big gap between the high card and the rest. Draws are scarce."
+    }
+  ]
+}
