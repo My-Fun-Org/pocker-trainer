@@ -22,7 +22,9 @@ body {
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold
+    /* appearance-none kills the native iOS button bezel that otherwise bleeds
+       through translucent fills and looks like a "cut off" two-tone color. */
+    @apply inline-flex appearance-none items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold
       transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-40
       active:scale-95 select-none;
   }
