@@ -25,6 +25,13 @@ function emptyStats(): ModeStats {
   return { attempts: 0, correct: 0, currentStreak: 0, bestStreak: 0 };
 }
 
+/**
+ * Stable, shared empty-stats reference returned by `statsFor` for unplayed
+ * modes. Returning a fresh object each call would give `useSyncExternalStore`
+ * a new snapshot every render and trigger an infinite update loop.
+ */
+const EMPTY_STATS: ModeStats = Object.freeze(emptyStats());
+
 export interface RecordResultInput {
   mode: TrainingMode;
   correct: boolean;
@@ -66,7 +73,7 @@ export const useProgressStore = create<ProgressState>()(
           return { stats: { ...state.stats, [mode]: next }, mistakes };
         }),
 
-      statsFor: (mode) => get().stats[mode] ?? emptyStats(),
+      statsFor: (mode) => get().stats[mode] ?? EMPTY_STATS,
 
       resetMode: (mode) =>
         set((state) => ({

@@ -65,9 +65,16 @@ const modeRoutes = Object.values(MODE_BY_ID).map((meta) => {
   return { path: meta.path, element: <Component /> };
 });
 
-export const router = createBrowserRouter([
-  { path: ROUTES.home, element: <StartScreen /> },
-  { path: ROUTES.stats, element: <StatsDashboard /> },
-  ...modeRoutes,
-  { path: "*", element: <Navigate to={ROUTES.home} replace /> },
-]);
+// Vite injects the deploy base (e.g. "/pocker-trainer/") as BASE_URL; React
+// Router wants a basename without the trailing slash.
+const basename = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+export const router = createBrowserRouter(
+  [
+    { path: ROUTES.home, element: <StartScreen /> },
+    { path: ROUTES.stats, element: <StatsDashboard /> },
+    ...modeRoutes,
+    { path: "*", element: <Navigate to={ROUTES.home} replace /> },
+  ],
+  { basename: basename || "/" },
+);

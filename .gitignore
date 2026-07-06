@@ -19,3 +19,5 @@ npm-debug.log*
 .env
 .env.*
 !.env.example
+.fly/
+.cursor/rules/fly-decision-records.mdc
