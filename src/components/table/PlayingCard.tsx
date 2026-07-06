@@ -55,12 +55,16 @@ function FaceUp({ card }: { card: Card }) {
   const red = SUIT_IS_RED[card.suit];
   const color = red ? "text-chip-red" : "text-neutral-900";
   return (
-    <div className="flex h-full w-full flex-col justify-between rounded-lg border border-black/10 bg-white p-1 leading-none">
-      <span className={`${color} self-start`}>{card.rank}</span>
-      <span className={`${color} self-center text-[1.4em]`}>
-        {SUIT_SYMBOL[card.suit]}
+    <div className="relative flex h-full w-full items-center justify-center rounded-lg border border-black/10 bg-white leading-none">
+      <span className={`${color} absolute left-1 top-1 text-[0.72em] font-bold`}>
+        {card.rank}
       </span>
-      <span className={`${color} self-end rotate-180`}>{card.rank}</span>
+      <span className={`${color} text-[1.5em]`}>{SUIT_SYMBOL[card.suit]}</span>
+      <span
+        className={`${color} absolute bottom-1 right-1 rotate-180 text-[0.72em] font-bold`}
+      >
+        {card.rank}
+      </span>
     </div>
   );
 }
