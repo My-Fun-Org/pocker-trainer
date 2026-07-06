@@ -1,5 +1,5 @@
 import { Card, POSITION_LABEL, Position, PREFLOP_ORDER } from "@/lib/poker";
-import { CardFace, markersForPosition, SEAT_MARKER_LABEL } from "./tableTypes";
+import { CardFace, markersForPosition, SeatMarker, SEAT_MARKER_LABEL } from "./tableTypes";
 import { PlayingCard } from "./PlayingCard";
 
 type SeatState = "hero" | "toAct" | "folded" | "raiser";
@@ -88,7 +88,10 @@ export function PreflopTable({
           {rotated.map((pos, i) => {
             const anchor = ANCHORS[i];
             const state = stateFor(pos);
-            const markers = markersForPosition(pos);
+            const allMarkers = markersForPosition(pos);
+            const isDealer = allMarkers.includes(SeatMarker.Dealer);
+            // The dealer gets a dedicated badge, so drop it from the inline chips.
+            const markers = allMarkers.filter((m) => m !== SeatMarker.Dealer);
             const isHero = state === "hero";
             return (
               <div
@@ -96,6 +99,14 @@ export function PreflopTable({
                 className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1"
                 style={{ top: `${anchor.top}%`, left: `${anchor.left}%` }}
               >
+                {isDealer && (
+                  <div className="flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-black shadow-lg ring-2 ring-chip-gold">
+                    <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-chip-red text-[9px] font-bold text-white">
+                      D
+                    </span>
+                    Dealer
+                  </div>
+                )}
                 {isHero && heroCards.length > 0 && (
                   <div className="flex gap-1">
                     {heroCards.map((card, ci) => (
