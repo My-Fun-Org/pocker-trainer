@@ -142,6 +142,9 @@ export function StackDepthTrainer() {
 
       {choice && (
         <>
+          <button className="btn-primary w-full" onClick={next}>
+            Next hand
+          </button>
           <CoachPanel
             status={isCorrect ? FeedbackStatus.Correct : FeedbackStatus.Incorrect}
             output={coach({
@@ -158,9 +161,6 @@ export function StackDepthTrainer() {
               ],
             })}
           />
-          <button className="btn-primary" onClick={next}>
-            Next hand
-          </button>
         </>
       )}
     </TrainerShell>

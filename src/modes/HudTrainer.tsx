@@ -122,6 +122,9 @@ export function HudTrainer() {
 
       {choice && (
         <>
+          <button className="btn-primary w-full" onClick={next}>
+            Next drill
+          </button>
           <CoachPanel
             status={isCorrect ? FeedbackStatus.Correct : FeedbackStatus.Incorrect}
             output={coach({
@@ -131,9 +134,6 @@ export function HudTrainer() {
               reasons: [drill.explanation],
             })}
           />
-          <button className="btn-primary" onClick={next}>
-            Next drill
-          </button>
         </>
       )}
     </TrainerShell>

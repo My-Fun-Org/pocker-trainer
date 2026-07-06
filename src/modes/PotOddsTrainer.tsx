@@ -116,6 +116,9 @@ export function PotOddsTrainer() {
 
       {choice && (
         <>
+          <button className="btn-primary w-full" onClick={deal}>
+            Next hand
+          </button>
           <Feedback
             status={isCorrect ? FeedbackStatus.Correct : FeedbackStatus.Incorrect}
             title={isCorrect ? "Correct!" : `The correct play is to ${correct}`}
@@ -133,9 +136,6 @@ export function PotOddsTrainer() {
                 : "not enough, so folding is correct."}
             </p>
           </Feedback>
-          <button className="btn-primary" onClick={deal}>
-            Next hand
-          </button>
         </>
       )}
     </TrainerShell>

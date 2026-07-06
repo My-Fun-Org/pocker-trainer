@@ -33,15 +33,16 @@ const choice = (id: PreflopAction): Choice<PreflopAction> => ({
 });
 
 // Folded to hero: you can only open-raise or fold (nobody to call/3-bet).
+// Order fold -> raise so fold sits on the left and the aggressive line on the right.
 const RFI_CHOICES: Choice<PreflopAction>[] = [
+  choice(PreflopAction.Fold),
   choice(PreflopAction.Raise),
-  choice(PreflopAction.Fold),
 ];
-// Facing an open: fold, flat-call, or 3-bet.
+// Facing an open: fold (left), flat-call (middle), 3-bet (right).
 const VS_RAISE_CHOICES: Choice<PreflopAction>[] = [
-  choice(PreflopAction.ThreeBet),
-  choice(PreflopAction.Call),
   choice(PreflopAction.Fold),
+  choice(PreflopAction.Call),
+  choice(PreflopAction.ThreeBet),
 ];
 
 /** Fixed seat order early -> late for the position-contrast strip. */
@@ -201,6 +202,10 @@ export function PreflopTrainer() {
 
       {verdict && (
         <>
+          <button className="btn-primary w-full" onClick={deal}>
+            Next hand
+          </button>
+
           <Feedback
             status={isCorrect ? FeedbackStatus.Correct : FeedbackStatus.Incorrect}
             title={
@@ -241,10 +246,6 @@ export function PreflopTrainer() {
               positions can open or 3-bet.
             </p>
           </div>
-
-          <button className="btn-primary" onClick={deal}>
-            Next hand
-          </button>
         </>
       )}
     </TrainerShell>

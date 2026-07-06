@@ -165,6 +165,9 @@ export function VillainProfilingTrainer() {
 
       {adjGuess && (
         <>
+          <button className="btn-primary w-full" onClick={next}>
+            New opponent
+          </button>
           <CoachPanel
             status={typeCorrect && adjGuess === profile.adjustment ? FeedbackStatus.Correct : FeedbackStatus.Partial}
             output={coach({
@@ -177,9 +180,6 @@ export function VillainProfilingTrainer() {
               ],
             })}
           />
-          <button className="btn-primary" onClick={next}>
-            New opponent
-          </button>
         </>
       )}
     </TrainerShell>

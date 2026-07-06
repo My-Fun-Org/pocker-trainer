@@ -105,6 +105,9 @@ export function BoardTextureTrainer() {
 
       {choice && (
         <>
+          <button className="btn-primary w-full" onClick={next}>
+            Next board
+          </button>
           <Feedback
             status={isCorrect ? FeedbackStatus.Correct : FeedbackStatus.Incorrect}
             title={
@@ -115,9 +118,6 @@ export function BoardTextureTrainer() {
           >
             <p>{scenario.explanation}</p>
           </Feedback>
-          <button className="btn-primary" onClick={next}>
-            Next board
-          </button>
         </>
       )}
     </TrainerShell>

@@ -172,6 +172,9 @@ export function DecisionTreeTrainer() {
 
       {picked && !done && (
         <>
+          <button className="btn-primary w-full" onClick={advance}>
+            {picked.nextNodeId ? "Continue the hand" : "Finish"}
+          </button>
           <CoachPanel
             status={picked.correct ? FeedbackStatus.Correct : FeedbackStatus.Incorrect}
             output={coach({
@@ -181,14 +184,14 @@ export function DecisionTreeTrainer() {
               reasons: [picked.explanation],
             })}
           />
-          <button className="btn-primary" onClick={advance}>
-            {picked.nextNodeId ? "Continue the hand" : "Finish"}
-          </button>
         </>
       )}
 
       {done && (
         <>
+          <button className="btn-primary w-full" onClick={reset}>
+            Play again
+          </button>
           <CoachPanel
             status={path.every((s) => s.correct) ? FeedbackStatus.Correct : FeedbackStatus.Partial}
             output={coach({
@@ -203,9 +206,6 @@ export function DecisionTreeTrainer() {
               ],
             })}
           />
-          <button className="btn-primary" onClick={reset}>
-            Play again
-          </button>
         </>
       )}
     </TrainerShell>

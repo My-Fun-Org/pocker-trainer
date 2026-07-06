@@ -152,6 +152,9 @@ export function RangeTrainer() {
         </button>
       ) : (
         <>
+          <button className="btn-primary w-full" onClick={next}>
+            Next scenario
+          </button>
           <Feedback
             status={isCorrect ? FeedbackStatus.Correct : FeedbackStatus.Partial}
             title={isCorrect ? "Correct read!" : "Compare your read"}
@@ -161,9 +164,6 @@ export function RangeTrainer() {
               Answer: {correctAnswers.join(", ")}
             </p>
           </Feedback>
-          <button className="btn-primary" onClick={next}>
-            Next scenario
-          </button>
         </>
       )}
     </TrainerShell>

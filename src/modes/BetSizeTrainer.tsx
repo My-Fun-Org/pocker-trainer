@@ -133,6 +133,9 @@ export function BetSizeTrainer() {
 
       {choice && (
         <>
+          <button className="btn-primary w-full" onClick={next}>
+            Next spot
+          </button>
           <CoachPanel
             status={isCorrect ? FeedbackStatus.Correct : FeedbackStatus.Partial}
             output={coach({
@@ -144,9 +147,6 @@ export function BetSizeTrainer() {
               reasons: [scenario.explanation],
             })}
           />
-          <button className="btn-primary" onClick={next}>
-            Next spot
-          </button>
         </>
       )}
     </TrainerShell>

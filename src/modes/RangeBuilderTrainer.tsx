@@ -177,6 +177,9 @@ export function RangeBuilderTrainer() {
         </button>
       ) : (
         <>
+          <button className="btn-primary w-full" onClick={advance}>
+            {streetIndex < scenario.streets.length - 1 ? `Next street (${scenario.streets[streetIndex + 1].name})` : "Restart"}
+          </button>
           <CoachPanel
             status={lastScore >= 0.6 ? FeedbackStatus.Correct : FeedbackStatus.Partial}
             output={coach({
@@ -191,9 +194,6 @@ export function RangeBuilderTrainer() {
               ],
             })}
           />
-          <button className="btn-primary" onClick={advance}>
-            {streetIndex < scenario.streets.length - 1 ? `Next street (${scenario.streets[streetIndex + 1].name})` : "Restart"}
-          </button>
         </>
       )}
     </TrainerShell>

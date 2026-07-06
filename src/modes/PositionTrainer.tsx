@@ -151,15 +151,15 @@ export function PositionTrainer() {
 
       {choice && (
         <>
+          <button className="btn-primary w-full" onClick={next}>
+            Next exercise
+          </button>
           <Feedback
             status={isCorrect ? FeedbackStatus.Correct : FeedbackStatus.Incorrect}
             title={isCorrect ? "Correct!" : "Not quite"}
           >
             <p>{exercise.explanation}</p>
           </Feedback>
-          <button className="btn-primary" onClick={next}>
-            Next exercise
-          </button>
         </>
       )}
     </TrainerShell>

@@ -142,6 +142,9 @@ export function EquityTrainer() {
 
       {guess && (
         <>
+          <button className="btn-primary w-full" onClick={next}>
+            Next matchup
+          </button>
           <CoachPanel
             status={isCorrect ? FeedbackStatus.Correct : FeedbackStatus.Incorrect}
             output={coach({
@@ -155,9 +158,6 @@ export function EquityTrainer() {
               ],
             })}
           />
-          <button className="btn-primary" onClick={next}>
-            Next matchup
-          </button>
         </>
       )}
     </TrainerShell>

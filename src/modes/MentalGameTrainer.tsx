@@ -174,6 +174,9 @@ export function MentalGameTrainer() {
 
       {choice && (
         <>
+          <button className="btn-primary w-full" onClick={next}>
+            Next scenario
+          </button>
           <CoachPanel
             status={isCorrect ? FeedbackStatus.Correct : FeedbackStatus.Incorrect}
             output={coach({
@@ -183,9 +186,6 @@ export function MentalGameTrainer() {
               reasons: [`The trap: ${scenario.trap}`, scenario.explanation],
             })}
           />
-          <button className="btn-primary" onClick={next}>
-            Next scenario
-          </button>
         </>
       )}
     </TrainerShell>

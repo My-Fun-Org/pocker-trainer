@@ -167,6 +167,9 @@ export function RiverTrainer() {
 
       {choice && (
         <>
+          <button className="btn-primary w-full" onClick={next}>
+            Next river
+          </button>
           <CoachPanel
             status={isCorrect ? FeedbackStatus.Correct : FeedbackStatus.Incorrect}
             output={coach({
@@ -177,9 +180,6 @@ export function RiverTrainer() {
               math,
             })}
           />
-          <button className="btn-primary" onClick={next}>
-            Next river
-          </button>
         </>
       )}
     </TrainerShell>

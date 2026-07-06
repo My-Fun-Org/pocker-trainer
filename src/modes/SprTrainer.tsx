@@ -167,6 +167,9 @@ export function SprTrainer() {
         </button>
       ) : (
         <>
+          <button className="btn-primary w-full" onClick={next}>
+            Next spot
+          </button>
           <CoachPanel
             status={allCorrect ? FeedbackStatus.Correct : bucketCorrect || commitCorrect ? FeedbackStatus.Partial : FeedbackStatus.Incorrect}
             output={coach({
@@ -179,9 +182,6 @@ export function SprTrainer() {
               ],
             })}
           />
-          <button className="btn-primary" onClick={next}>
-            Next spot
-          </button>
         </>
       )}
     </TrainerShell>

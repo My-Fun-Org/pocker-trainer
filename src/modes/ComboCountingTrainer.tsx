@@ -157,6 +157,9 @@ export function ComboCountingTrainer() {
 
       {choice && (
         <>
+          <button className="btn-primary w-full" onClick={next}>
+            Next question
+          </button>
           <CoachPanel
             status={isCorrect ? FeedbackStatus.Correct : FeedbackStatus.Incorrect}
             output={coach({
@@ -166,9 +169,6 @@ export function ComboCountingTrainer() {
               reasons: [scenario.explanation],
             })}
           />
-          <button className="btn-primary" onClick={next}>
-            Next question
-          </button>
         </>
       )}
     </TrainerShell>

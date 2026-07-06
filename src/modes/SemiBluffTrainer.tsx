@@ -174,6 +174,9 @@ export function SemiBluffTrainer() {
 
       {choice && (
         <>
+          <button className="btn-primary w-full" onClick={next}>
+            Next spot
+          </button>
           <CoachPanel
             status={isCorrect ? FeedbackStatus.Correct : FeedbackStatus.Incorrect}
             output={coach({
@@ -187,9 +190,6 @@ export function SemiBluffTrainer() {
               ],
             })}
           />
-          <button className="btn-primary" onClick={next}>
-            Next spot
-          </button>
         </>
       )}
     </TrainerShell>

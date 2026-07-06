@@ -146,6 +146,9 @@ export function OutsTrainer() {
         </button>
       ) : (
         <>
+          <button className="btn-primary w-full" onClick={deal}>
+            Next hand
+          </button>
           <Feedback
             status={status}
             title={
@@ -162,9 +165,6 @@ export function OutsTrainer() {
               <b>{analysis.equityToRiver}% equity</b> to improve by the river.
             </p>
           </Feedback>
-          <button className="btn-primary" onClick={deal}>
-            Next hand
-          </button>
         </>
       )}
     </TrainerShell>

@@ -116,6 +116,9 @@ export function PlayerTypesTrainer() {
 
       {adjGuess && (
         <>
+          <button className="btn-primary w-full" onClick={next}>
+            Next opponent
+          </button>
           <CoachPanel
             status={typeCorrect && adjCorrect ? FeedbackStatus.Correct : FeedbackStatus.Partial}
             output={coach({
@@ -125,9 +128,6 @@ export function PlayerTypesTrainer() {
               reasons: [profile.tell, `Adjustment: ${profile.adjustment}`],
             })}
           />
-          <button className="btn-primary" onClick={next}>
-            Next opponent
-          </button>
         </>
       )}
     </TrainerShell>
