@@ -40,6 +40,10 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
+        with:
+          # Auto-create the Pages site if it isn't enabled yet, so the deploy
+          # doesn't depend on manually flipping Settings -> Pages -> Source.
+          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
