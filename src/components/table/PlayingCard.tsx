@@ -3,7 +3,7 @@ import { Card, SUIT_IS_RED, SUIT_SYMBOL } from "@/lib/poker";
 import { CardFace } from "./tableTypes";
 
 const SIZE = {
-  sm: "h-14 w-10 text-base",
+  sm: "h-16 w-11 text-sm",
   md: "h-20 w-14 text-xl",
   lg: "h-28 w-20 text-3xl",
 } as const;
@@ -38,7 +38,7 @@ export function PlayingCard({
         stiffness: 260,
         damping: 22,
       }}
-      className={`relative flex select-none items-center justify-center rounded-lg font-semibold shadow-card ${SIZE[size]}`}
+      className={`relative flex select-none items-center justify-center overflow-hidden rounded-lg font-semibold shadow-card ${SIZE[size]}`}
     >
       {isFaceUp ? (
         <FaceUp card={card!} />

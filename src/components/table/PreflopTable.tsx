@@ -120,9 +120,9 @@ export function PreflopTable({
                     ))}
                   </div>
                 )}
-                <div className={`min-w-[5.5rem] rounded-xl px-2.5 py-1.5 text-center ${STATE_CLASS[state]}`}>
+                <div className={`min-w-[4.25rem] rounded-lg px-2 py-1 text-center ${STATE_CLASS[state]}`}>
                   <div className="flex items-center justify-center gap-1">
-                    <span className="text-sm font-bold text-white">{pos}</span>
+                    <span className="text-xs font-bold text-white sm:text-sm">{pos}</span>
                     {markers.map((m) => (
                       <span
                         key={m}
