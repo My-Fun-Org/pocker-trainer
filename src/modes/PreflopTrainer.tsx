@@ -2,7 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import {
   correctPreflopAction,
   generatePreflopScenario,
+  Position,
   POSITION_LABEL,
+  POSITIONS,
   PREFLOP_ACTION_LABEL,
   PreflopAction,
   PreflopChart,
@@ -13,11 +15,7 @@ import {
 import { loadPreflopChart } from "@/lib/data";
 import { TrainingMode } from "@/types/training";
 import { useProgressStore } from "@/store/progress";
-import {
-  markersForPosition,
-  PokerTable,
-  SeatModel,
-} from "@/components/table";
+import { PreflopTable } from "@/components/table";
 import {
   Choice,
   ChoiceButtons,
@@ -26,25 +24,62 @@ import {
   TrainerShell,
 } from "@/components/ui";
 
-const HERO_STACK_BB = 100;
 const OPENER_RAISE_BB = 2.5;
 const REASONING_STEP = 6; // "What is my action?"
 
-const ACTION_CHOICES: Choice<PreflopAction>[] = [
-  { id: PreflopAction.Fold, label: PREFLOP_ACTION_LABEL[PreflopAction.Fold] },
-  { id: PreflopAction.Call, label: PREFLOP_ACTION_LABEL[PreflopAction.Call] },
-  { id: PreflopAction.Raise, label: PREFLOP_ACTION_LABEL[PreflopAction.Raise] },
-  {
-    id: PreflopAction.ThreeBet,
-    label: PREFLOP_ACTION_LABEL[PreflopAction.ThreeBet],
-  },
+const choice = (id: PreflopAction): Choice<PreflopAction> => ({
+  id,
+  label: PREFLOP_ACTION_LABEL[id],
+});
+
+// Folded to hero: you can only open-raise or fold (nobody to call/3-bet).
+const RFI_CHOICES: Choice<PreflopAction>[] = [
+  choice(PreflopAction.Raise),
+  choice(PreflopAction.Fold),
+];
+// Facing an open: fold, flat-call, or 3-bet.
+const VS_RAISE_CHOICES: Choice<PreflopAction>[] = [
+  choice(PreflopAction.ThreeBet),
+  choice(PreflopAction.Call),
+  choice(PreflopAction.Fold),
+];
+
+/** Fixed seat order early -> late for the position-contrast strip. */
+const SEAT_ORDER: Position[] = [
+  Position.UTG,
+  Position.MP,
+  Position.CO,
+  Position.BTN,
+  Position.SB,
+  Position.BB,
+];
+
+/** Tailwind tone for an action chip in the contrast strip. */
+function actionTone(action: PreflopAction): string {
+  switch (action) {
+    case PreflopAction.Raise:
+    case PreflopAction.ThreeBet:
+      return "bg-emerald-500/20 text-emerald-200";
+    case PreflopAction.Call:
+      return "bg-amber-500/20 text-amber-200";
+    default:
+      return "bg-white/5 text-white/40";
+  }
+}
+
+type Focus = Position | "any";
+
+const FOCUS_OPTIONS: { id: Focus; label: string }[] = [
+  { id: "any", label: "Any" },
+  ...POSITIONS.map((p) => ({ id: p as Focus, label: p })),
 ];
 
 export function PreflopTrainer() {
   const [chart, setChart] = useState<PreflopChart | null>(null);
   const [scenario, setScenario] = useState<PreflopScenario | null>(null);
-  const [choice, setChoice] = useState<PreflopAction | null>(null);
+  const [selection, setSelection] = useState<PreflopAction | null>(null);
   const [verdict, setVerdict] = useState<PreflopVerdict | null>(null);
+  const [focus, setFocus] = useState<Focus>("any");
   const recordResult = useProgressStore((s) => s.recordResult);
 
   useEffect(() => {
@@ -52,10 +87,10 @@ export function PreflopTrainer() {
   }, []);
 
   const deal = useCallback(() => {
-    setChoice(null);
+    setSelection(null);
     setVerdict(null);
-    setScenario(generatePreflopScenario());
-  }, []);
+    setScenario(generatePreflopScenario(focus === "any" ? undefined : focus));
+  }, [focus]);
 
   useEffect(() => {
     if (chart) deal();
@@ -69,19 +104,22 @@ export function PreflopTrainer() {
       scenario.situation,
       scenario.hand,
     );
-    setChoice(action);
+    setSelection(action);
     setVerdict(result);
     const isCorrect = action === result.action;
+    const context =
+      scenario.situation === PreflopSituation.VsRaise && scenario.openerPosition
+        ? `facing a ${POSITION_LABEL[scenario.openerPosition]} open`
+        : "folded to you";
     recordResult({
       mode: TrainingMode.Preflop,
       correct: isCorrect,
-      mistake: isCorrect
-        ? undefined
-        : {
-            prompt: `${scenario.hand} from ${scenario.position}`,
-            chosen: PREFLOP_ACTION_LABEL[action],
-            correct: PREFLOP_ACTION_LABEL[result.action],
-          },
+      audit: {
+        prompt: `${scenario.hand} from ${POSITION_LABEL[scenario.position]} (${context})`,
+        chosen: PREFLOP_ACTION_LABEL[action],
+        correct: PREFLOP_ACTION_LABEL[result.action],
+        detail: [result.reason].filter(Boolean) as string[],
+      },
     });
   };
 
@@ -94,54 +132,68 @@ export function PreflopTrainer() {
   }
 
   const facingRaise = scenario.situation === PreflopSituation.VsRaise;
-  const heroSeat: SeatModel = {
-    id: "hero",
-    name: "Hero",
-    isHero: true,
-    isActive: true,
-    position: scenario.position,
-    stackBB: HERO_STACK_BB,
-    cards: scenario.hole,
-    markers: markersForPosition(scenario.position),
-  };
-  const villainSeats: SeatModel[] = facingRaise
-    ? [
-        {
-          id: "raiser",
-          name: "Raiser",
-          stackBB: HERO_STACK_BB,
-          betBB: OPENER_RAISE_BB,
-          cards: [],
-          faceDown: true,
-        },
-      ]
-    : [];
+  const isCorrect = verdict !== null && selection === verdict.action;
+  const actionChoices = facingRaise ? VS_RAISE_CHOICES : RFI_CHOICES;
 
-  const isCorrect = verdict !== null && choice === verdict.action;
+  // Same hand, every seat: the core "UTG folds, Button raises" lesson.
+  const contrast =
+    chart && verdict
+      ? SEAT_ORDER.filter(
+          (pos) => !(scenario.situation === PreflopSituation.Rfi && pos === Position.BB),
+        ).map((pos) => ({
+          pos,
+          action: correctPreflopAction(chart, pos, scenario.situation, scenario.hand)
+            .action,
+        }))
+      : [];
 
   return (
     <TrainerShell mode={TrainingMode.Preflop} highlightStep={REASONING_STEP}>
+      <div className="card-surface p-3">
+        <p className="mb-2 text-[10px] uppercase tracking-wide text-white/40">
+          Practice a seat
+        </p>
+        <div className="flex flex-wrap gap-1.5">
+          {FOCUS_OPTIONS.map((opt) => (
+            <button
+              key={opt.id}
+              onClick={() => setFocus(opt.id)}
+              className={`rounded-md px-2.5 py-1 text-xs font-semibold transition-colors ${
+                focus === opt.id
+                  ? "bg-chip-gold text-black"
+                  : "bg-white/10 text-white/70 hover:bg-white/20"
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="card-surface p-4">
         <p className="text-sm text-white/80">
           You are in <b>{POSITION_LABEL[scenario.position]}</b>.{" "}
-          {facingRaise
-            ? "A player opens to 2.5 BB and it folds to you."
-            : "It folds around to you."}{" "}
+          {facingRaise && scenario.openerPosition
+            ? `The ${POSITION_LABEL[scenario.openerPosition]} opens to ${OPENER_RAISE_BB} BB and everyone folds to you.`
+            : "Everyone folds to you."}{" "}
           What is your play?
         </p>
       </div>
 
-      <PokerTable
-        heroSeat={heroSeat}
-        villainSeats={villainSeats}
+      <PreflopTable
+        heroPosition={scenario.position}
+        heroCards={scenario.hole}
+        facingRaise={facingRaise}
+        openerPosition={scenario.openerPosition}
+        openRaiseBB={OPENER_RAISE_BB}
         potBB={facingRaise ? OPENER_RAISE_BB + 1.5 : 1.5}
       />
 
       <ChoiceButtons
-        choices={ACTION_CHOICES}
-        selected={choice ? [choice] : []}
+        choices={actionChoices}
+        selected={selection ? [selection] : []}
         onToggle={answer}
-        columns={4}
+        columns={actionChoices.length}
         disabled={verdict !== null}
         revealed={verdict !== null}
         correctIds={verdict ? [verdict.action] : []}
@@ -159,6 +211,37 @@ export function PreflopTrainer() {
           >
             <p>{verdict.reason}</p>
           </Feedback>
+
+          <div className="card-surface p-4">
+            <p className="mb-2 text-xs uppercase tracking-wide text-chip-gold">
+              {scenario.hand} by position{" "}
+              <span className="text-white/40 normal-case">
+                ({facingRaise ? "facing a raise" : "when folded to you"})
+              </span>
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {contrast.map(({ pos, action }) => (
+                <div
+                  key={pos}
+                  className={`flex flex-col items-center gap-0.5 rounded-md px-2.5 py-1.5 ${actionTone(
+                    action,
+                  )} ${pos === scenario.position ? "ring-2 ring-chip-gold" : ""}`}
+                >
+                  <span className="text-[10px] uppercase tracking-wide opacity-70">
+                    {pos}
+                  </span>
+                  <span className="text-xs font-semibold">
+                    {PREFLOP_ACTION_LABEL[action]}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-2 text-xs text-white/50">
+              Same cards, different seats: earlier positions must fold hands that later
+              positions can open or 3-bet.
+            </p>
+          </div>
+
           <button className="btn-primary" onClick={deal}>
             Next hand
           </button>

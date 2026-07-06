@@ -128,7 +128,16 @@ export function MentalGameTrainer() {
     recordResult({
       mode: TrainingMode.MentalGame,
       correct,
-      mistake: correct ? undefined : { prompt: scenario.setup, chosen: id, correct: scenario.correctAction },
+      audit: {
+        prompt: `[${scenario.emotion}] ${scenario.setup}`,
+        chosen: id,
+        correct: scenario.correctAction,
+        detail: [
+          scenario.board.length ? `Hero: ${scenario.heroCards.join(" ")} | Board: ${scenario.board.join(" ")}` : `Hero: ${scenario.heroCards.join(" ")}`,
+          `Trap: ${scenario.trap}`,
+          scenario.explanation,
+        ],
+      },
     });
   };
 

@@ -93,13 +93,16 @@ export function StackDepthTrainer() {
     recordResult({
       mode: TrainingMode.StackDepth,
       correct,
-      mistake: correct
-        ? undefined
-        : {
-            prompt: `${hand} at ${line.depthBB} BB`,
-            chosen: id,
-            correct: line.correctAction,
-          },
+      audit: {
+        prompt: `${hand} in ${POSITION_LABEL[scenario.position]} at ${line.depthBB} BB - ${scenario.situation}`,
+        chosen: id,
+        correct: line.correctAction,
+        detail: [
+          `Hero: ${scenario.heroCards.join(" ")}`,
+          line.explanation,
+          `Same hand by depth: ${scenario.depths.map((d) => `${d.depthBB} BB -> ${d.correctAction}`).join(", ")}`,
+        ],
+      },
     });
   };
 

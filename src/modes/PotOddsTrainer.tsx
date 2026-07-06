@@ -54,13 +54,15 @@ export function PotOddsTrainer() {
     recordResult({
       mode: TrainingMode.PotOdds,
       correct: isCorrect,
-      mistake: isCorrect
-        ? undefined
-        : {
-            prompt: `Pot ${pot}, bet ${bet}, ${DRAW_LABEL[analysis.drawType]}`,
-            chosen: DECISION_LABEL[decision],
-            correct: DECISION_LABEL[correct],
-          },
+      audit: {
+        prompt: `Turn: pot ${pot} BB, villain bets ${bet} BB, holding a ${DRAW_LABEL[analysis.drawType].toLowerCase()}`,
+        chosen: DECISION_LABEL[decision],
+        correct: DECISION_LABEL[correct],
+        detail: [
+          `Hero: ${scenario.hole.map((c) => `${c.rank}${c.suit}`).join(" ")} | Board: ${scenario.board.map((c) => `${c.rank}${c.suit}`).join(" ")}`,
+          `Need ${odds.requiredEquity.toFixed(1)}% equity (${odds.oddsRatio.toFixed(1)} to 1); have ~${heroEquity}% with ${analysis.outs} outs.`,
+        ],
+      },
     });
   };
 

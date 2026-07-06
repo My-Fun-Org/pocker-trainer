@@ -105,9 +105,15 @@ export function ValueBettingTrainer() {
     recordResult({
       mode: TrainingMode.ValueBetting,
       correct,
-      mistake: correct
-        ? undefined
-        : { prompt: `Value bet: ${scenario.heroDesc}`, chosen: id, correct: correctAction },
+      audit: {
+        prompt: `River: hero has ${scenario.heroDesc} vs ${scenario.villainDesc}`,
+        chosen: `${id} (worse hands named: ${selected.join(", ") || "none"})`,
+        correct: `${correctAction}; worse hands that call: ${scenario.worseThatCall.join(", ")}`,
+        detail: [
+          `Hero: ${scenario.heroCards.join(" ")} | Board: ${scenario.board.join(" ")}`,
+          scenario.explanation,
+        ],
+      },
     });
   };
 

@@ -70,16 +70,20 @@ export function RangeTrainer() {
   const submit = () => {
     if (submitted) return;
     setSubmitted(true);
+    const fmt = (cs: { rank: string; suit: string }[]) => cs.map((c) => `${c.rank}${c.suit}`).join(" ");
     recordResult({
       mode: TrainingMode.Range,
       correct: isCorrect,
-      mistake: isCorrect
-        ? undefined
-        : {
-            prompt: scenario.title,
-            chosen: selected.join(", ") || "(nothing)",
-            correct: correctAnswers.join(", "),
-          },
+      audit: {
+        prompt: `${scenario.title} - ${scenario.question.prompt}`,
+        chosen: selected.join(", ") || "(nothing)",
+        correct: correctAnswers.join(", "),
+        detail: [
+          `Hero: ${fmt(scenario.heroCards)}${board.length ? ` | Board: ${fmt(board)}` : ""}`,
+          ...scenario.preflopAction,
+          scenario.question.explanation,
+        ],
+      },
     });
   };
 

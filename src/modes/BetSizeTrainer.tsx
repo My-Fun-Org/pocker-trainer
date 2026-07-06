@@ -86,13 +86,15 @@ export function BetSizeTrainer() {
     recordResult({
       mode: TrainingMode.BetSize,
       correct,
-      mistake: correct
-        ? undefined
-        : {
-            prompt: `${BET_INTENT_LABEL[scenario.intent]} on a ${scenario.textureLabel} board`,
-            chosen: BET_SIZE_LABEL[size],
-            correct: scenario.recommended.map((s) => BET_SIZE_LABEL[s]).join(" or "),
-          },
+      audit: {
+        prompt: `${BET_INTENT_LABEL[scenario.intent]} on a ${scenario.textureLabel} board (pot ${scenario.potBB} BB, stack ${scenario.effectiveStackBB} BB)`,
+        chosen: BET_SIZE_LABEL[size],
+        correct: scenario.recommended.map((s) => BET_SIZE_LABEL[s]).join(" or "),
+        detail: [
+          `Hero: ${scenario.hole.map((c) => `${c.rank}${c.suit}`).join(" ")} | Flop: ${scenario.flop.map((c) => `${c.rank}${c.suit}`).join(" ")}`,
+          scenario.explanation,
+        ],
+      },
     });
   };
 

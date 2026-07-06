@@ -97,13 +97,16 @@ export function SprTrainer() {
     recordResult({
       mode: TrainingMode.Spr,
       correct: allCorrect,
-      mistake: allCorrect
-        ? undefined
-        : {
-            prompt: `Pot ${scenario.potBB}, stack ${scenario.effectiveStackBB}, ${scenario.handLabel}`,
-            chosen: `${bucketGuess}, ${commitGuess}`,
-            correct: `SPR ${scenario.bucket}, ${scenario.committed ? YES : NO}`,
-          },
+      audit: {
+        prompt: `Pot ${scenario.potBB} BB, effective stack ${scenario.effectiveStackBB} BB, holding ${scenario.handLabel}`,
+        chosen: `${bucketGuess}, ${commitGuess}`,
+        correct: `SPR ${scenario.bucket}, ${scenario.committed ? YES : NO}`,
+        detail: [
+          `Hero: ${scenario.hole.map((c) => `${c.rank}${c.suit}`).join(" ")} | Flop: ${scenario.flop.map((c) => `${c.rank}${c.suit}`).join(" ")}`,
+          `SPR = ${scenario.effectiveStackBB} / ${scenario.potBB} = ${scenario.sprValue.toFixed(1)} (${scenario.bucket})`,
+          scenario.reason,
+        ],
+      },
     });
   };
 

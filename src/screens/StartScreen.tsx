@@ -9,11 +9,13 @@ import {
 import { useProgressStore } from "@/store/progress";
 import { levelFrom, MAX_STARS, starRating, totalStars } from "@/lib/progression";
 import { dailyChallengeMode } from "@/lib/achievements";
+import { downloadAuditJson } from "@/lib/audit";
 import { REASONING_STEPS } from "@/components/ui";
 
 export function StartScreen() {
   const resetAll = useProgressStore((s) => s.resetAll);
   const stats = useProgressStore((s) => s.stats);
+  const audits = useProgressStore((s) => s.audits);
   const totalAttempts = Object.values(stats).reduce((sum, m) => sum + (m?.attempts ?? 0), 0);
   const stars = totalStars(stats);
   const level = levelFrom(stars);
@@ -28,6 +30,26 @@ export function StartScreen() {
         <p className="mt-2 text-white/60">
           Learn how to think, not what to memorize - one reasoning step at a time.
         </p>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-sm">
+          <Link to={ROUTES.stats} className="text-chip-gold hover:underline">
+            Statistics
+          </Link>
+          <Link to={ROUTES.audit} className="text-chip-gold hover:underline">
+            Exercise audit log
+          </Link>
+          <button
+            className="btn-ghost px-3 py-1.5 text-sm disabled:opacity-40"
+            onClick={() => downloadAuditJson(audits)}
+            disabled={audits.length === 0}
+            title={
+              audits.length === 0
+                ? "Play some exercises first - nothing to download yet"
+                : "Download every recorded exercise as JSON"
+            }
+          >
+            Download audit ({audits.length})
+          </button>
+        </div>
       </header>
 
       <div className="mb-8 grid gap-4 md:grid-cols-3">

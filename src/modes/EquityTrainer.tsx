@@ -98,9 +98,16 @@ export function EquityTrainer() {
     recordResult({
       mode: TrainingMode.Equity,
       correct,
-      mistake: correct
-        ? undefined
-        : { prompt: matchup.label, chosen: id, correct: correctBucket },
+      audit: {
+        prompt: `Estimate hero equity: ${matchup.label}`,
+        chosen: BUCKETS.find((b) => b.id === id)?.label ?? id,
+        correct: `${correctBucket} (actual ~${equity.toFixed(1)}%)`,
+        detail: [
+          `Hero ${matchup.hero.join(" ")} vs Villain ${matchup.villain.join(" ")}${matchup.board ? ` on ${matchup.board.join(" ")}` : ""}`,
+          `Simulated equity ~${equity.toFixed(1)}% (Monte Carlo, 3,000 runouts - may vary slightly per run)`,
+          matchup.note,
+        ],
+      },
     });
   };
 

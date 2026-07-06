@@ -10,6 +10,7 @@ import {
 } from "./draws";
 import { computePotOdds, Decision, potOddsVerdict, PotOddsResult } from "./potOdds";
 import { Position, POSITIONS, PreflopSituation } from "./preflop";
+import { PREFLOP_ORDER } from "./positions";
 
 const ONE_CARD_TO_COME = 1;
 
@@ -101,19 +102,45 @@ export interface PreflopScenario {
   hand: string; // 169-notation
   position: Position;
   situation: PreflopSituation;
+  /** For a vsRaise spot: the earlier seat that opened before hero. */
+  openerPosition?: Position;
 }
 
-export function generatePreflopScenario(): PreflopScenario {
+/**
+ * Deal a preflop spot. Pass `forcePosition` to drill a specific seat; otherwise
+ * a random position is chosen so every seat is practiced.
+ *
+ * The available situation depends on position *relative to the other players*:
+ * - UTG acts first, so it can only be raise-first-in (never facing a raise).
+ * - The Big Blind is never folded to, so it always faces a raise.
+ * - Facing a raise requires at least one earlier seat to have opened.
+ */
+export function generatePreflopScenario(
+  forcePosition?: Position,
+): PreflopScenario {
   const deck = shuffledDeck();
   const hole = [deck.pop()!, deck.pop()!];
   const hand = toHandNotation(hole[0], hole[1]);
-  const position = pickRandom(POSITIONS);
-  // The Big Blind is never first to act preflop, so it always faces a raise.
-  const situation: PreflopSituation =
-    position === Position.BB
-      ? PreflopSituation.VsRaise
-      : Math.random() < RFI_PROBABILITY
+  const position = forcePosition ?? pickRandom(POSITIONS);
+
+  const earlierSeats = PREFLOP_ORDER.slice(0, PREFLOP_ORDER.indexOf(position));
+  const canRfi = position !== Position.BB;
+  const canFaceRaise = earlierSeats.length > 0;
+
+  let situation: PreflopSituation;
+  if (canRfi && canFaceRaise) {
+    situation =
+      Math.random() < RFI_PROBABILITY
         ? PreflopSituation.Rfi
         : PreflopSituation.VsRaise;
-  return { hole, hand, position, situation };
+  } else if (canFaceRaise) {
+    situation = PreflopSituation.VsRaise;
+  } else {
+    situation = PreflopSituation.Rfi;
+  }
+
+  const openerPosition =
+    situation === PreflopSituation.VsRaise ? pickRandom(earlierSeats) : undefined;
+
+  return { hole, hand, position, situation, openerPosition };
 }

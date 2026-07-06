@@ -67,13 +67,12 @@ export function BoardTextureTrainer() {
     recordResult({
       mode: TrainingMode.BoardTexture,
       correct: isCorrect,
-      mistake: isCorrect
-        ? undefined
-        : {
-            prompt: scenario.flop.map((c) => `${c.rank}${c.suit}`).join(" "),
-            chosen: TEXTURE_LABEL[texture],
-            correct: TEXTURE_LABEL[scenario.texture],
-          },
+      audit: {
+        prompt: `How wet is the flop ${scenario.flop.map((c) => `${c.rank}${c.suit}`).join(" ")}?`,
+        chosen: TEXTURE_LABEL[texture],
+        correct: TEXTURE_LABEL[scenario.texture],
+        detail: [scenario.explanation],
+      },
     });
   };
 

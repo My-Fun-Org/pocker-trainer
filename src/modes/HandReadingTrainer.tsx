@@ -140,9 +140,18 @@ export function HandReadingTrainer() {
     recordResult({
       mode: TrainingMode.HandReading,
       correct,
-      mistake: correct
-        ? undefined
-        : { prompt: scenario.situation, chosen: id, correct: scenario.correctAction },
+      audit: {
+        prompt: scenario.situation,
+        chosen: id,
+        correct: scenario.correctAction,
+        detail: [
+          `Hero: ${scenario.heroCards.join(" ")} | Board: ${scenario.board.join(" ")}`,
+          `Worse hands that call (key): ${scenario.worseHandsCall.join(", ")}`,
+          `Better hands that continue (key): ${scenario.betterHandsContinue.join(", ")}`,
+          `Bluffs (key): ${scenario.bluffs.join(", ")}`,
+          scenario.explanation,
+        ],
+      },
     });
   };
 

@@ -30,6 +30,7 @@ import {
 } from "@/modes";
 import { StartScreen } from "@/screens/StartScreen";
 import { StatsDashboard } from "@/screens/StatsDashboard";
+import { AuditLog } from "@/screens/AuditLog";
 
 const MODE_COMPONENT: Record<TrainingMode, React.ComponentType> = {
   [TrainingMode.Preflop]: PreflopTrainer,
@@ -73,6 +74,7 @@ export const router = createBrowserRouter(
   [
     { path: ROUTES.home, element: <StartScreen /> },
     { path: ROUTES.stats, element: <StatsDashboard /> },
+    { path: ROUTES.audit, element: <AuditLog /> },
     ...modeRoutes,
     { path: "*", element: <Navigate to={ROUTES.home} replace /> },
   ],

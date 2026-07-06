@@ -110,9 +110,14 @@ export function DecisionTreeTrainer() {
       recordResult({
         mode: TrainingMode.DecisionTree,
         correct: allCorrect,
-        mistake: allCorrect
-          ? undefined
-          : { prompt: TREE.id, chosen: path.map((s) => s.action).join(" > "), correct: "the recommended line" },
+        audit: {
+          prompt: `Decision tree "${TREE.id}" - hero ${TREE.heroCards.join(" ")}`,
+          chosen: path.map((s) => `${s.street}: ${s.action}`).join(" > "),
+          correct: Object.values(TREE.nodes)
+            .map((n) => `${n.street}: ${n.options.find((o) => o.correct)?.action}`)
+            .join(" > "),
+          detail: path.map((s) => `${s.street}: chose "${s.action}" ${s.correct ? "(correct)" : "(off the recommended line)"}`),
+        },
       });
     }
   };

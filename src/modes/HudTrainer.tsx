@@ -92,7 +92,12 @@ export function HudTrainer() {
     recordResult({
       mode: TrainingMode.Hud,
       correct,
-      mistake: correct ? undefined : { prompt: drill.prompt, chosen: id, correct: drill.correct },
+      audit: {
+        prompt: drill.prompt,
+        chosen: drill.kind === "interpret" ? PLAYER_TYPE_PROFILES[id as PlayerType].label : id,
+        correct: drill.kind === "interpret" ? PLAYER_TYPE_PROFILES[drill.correct as PlayerType].label : drill.correct,
+        detail: [`Drill type: ${drill.kind}`, drill.explanation],
+      },
     });
   };
 

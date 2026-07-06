@@ -72,14 +72,16 @@ export function OutsTrainer() {
     recordResult({
       mode: TrainingMode.Outs,
       correct: drawCorrect && outsCorrect,
-      mistake:
-        drawCorrect && outsCorrect
-          ? undefined
-          : {
-              prompt: "Identify draw and count outs",
-              chosen: `${DRAW_LABEL[drawGuess]}, ${outsGuess} outs`,
-              correct: `${DRAW_LABEL[analysis.drawType]}, ${analysis.outs} outs`,
-            },
+      audit: {
+        prompt: "Identify the draw and count outs to the river",
+        chosen: `${DRAW_LABEL[drawGuess]}, ${outsGuess} outs`,
+        correct: `${DRAW_LABEL[analysis.drawType]}, ${analysis.outs} outs`,
+        detail: [
+          `Hero: ${scenario.hole.map((c) => `${c.rank}${c.suit}`).join(" ")} | Flop: ${scenario.flop.map((c) => `${c.rank}${c.suit}`).join(" ")}`,
+          ...analysis.notes,
+          `Rule of 2 and 4: ~${analysis.equityToRiver}% equity to improve by the river.`,
+        ],
+      },
     });
   };
 

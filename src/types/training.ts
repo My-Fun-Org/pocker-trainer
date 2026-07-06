@@ -368,4 +368,5 @@ export const MODE_BY_ID: Record<TrainingMode, TrainingModeMeta> =
 export const ROUTES = {
   home: "/",
   stats: "/stats",
+  audit: "/audit",
 } as const;

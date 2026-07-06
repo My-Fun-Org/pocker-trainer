@@ -118,12 +118,16 @@ export function PositionTrainer() {
     if (choice) return;
     setChoice(id);
     const correct = id === exercise.correct;
+    const labelFor = (v: string) => exercise.choices.find((c) => c.id === v)?.label ?? v;
     recordResult({
       mode: TrainingMode.Position,
       correct,
-      mistake: correct
-        ? undefined
-        : { prompt: exercise.prompt, chosen: id, correct: exercise.correct },
+      audit: {
+        prompt: exercise.prompt,
+        chosen: labelFor(id),
+        correct: labelFor(exercise.correct),
+        detail: [`Exercise type: ${exercise.kind}`, exercise.explanation],
+      },
     });
   };
 

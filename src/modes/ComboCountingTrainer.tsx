@@ -104,13 +104,18 @@ export function ComboCountingTrainer() {
     recordResult({
       mode: TrainingMode.ComboCounting,
       correct,
-      mistake: correct
-        ? undefined
-        : {
-            prompt: scenario.kind === "count" ? `Combos of ${scenario.hand}` : `${scenario.handA} vs ${scenario.handB}`,
-            chosen: id,
-            correct: scenario.correct,
-          },
+      audit: {
+        prompt:
+          scenario.kind === "count"
+            ? `How many combos of ${scenario.hand}${scenario.dead.length ? " (with dead cards)" : ""}?`
+            : `Which is more likely: ${scenario.handA} (A) or ${scenario.handB} (B)?`,
+        chosen: id,
+        correct: scenario.correct,
+        detail: [
+          scenario.dead.length ? `Dead cards: ${scenario.dead.map(formatCard).join(" ")}` : "Full deck (no dead cards)",
+          scenario.explanation,
+        ],
+      },
     });
   };
 

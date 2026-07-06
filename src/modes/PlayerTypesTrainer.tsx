@@ -66,13 +66,12 @@ export function PlayerTypesTrainer() {
     recordResult({
       mode: TrainingMode.PlayerTypes,
       correct: bothCorrect,
-      mistake: bothCorrect
-        ? undefined
-        : {
-            prompt: profile.tell,
-            chosen: `${typeGuess ? PLAYER_TYPE_PROFILES[typeGuess].label : "?"}`,
-            correct: profile.label,
-          },
+      audit: {
+        prompt: `Classify + adjust: "${profile.tell}" (VPIP ${profile.vpip}% / PFR ${profile.pfr}% / AF ${profile.af})`,
+        chosen: `${typeGuess ? PLAYER_TYPE_PROFILES[typeGuess].label : "?"} + adjustment "${a}"`,
+        correct: `${profile.label} + adjustment "${profile.adjustment}"`,
+        detail: [profile.tell, `Adjustment: ${profile.adjustment}`],
+      },
     });
   };
 

@@ -102,9 +102,15 @@ export function VillainProfilingTrainer() {
     recordResult({
       mode: TrainingMode.VillainProfiling,
       correct: both,
-      mistake: both
-        ? undefined
-        : { prompt: `VPIP ${session.vpipPct}/PFR ${session.pfrPct}`, chosen: typeGuess ? PLAYER_TYPE_PROFILES[typeGuess].label : "?", correct: profile.label },
+      audit: {
+        prompt: `Classify opponent over 20 hands (VPIP ${session.vpipPct}% / PFR ${session.pfrPct}%)`,
+        chosen: `${typeGuess ? PLAYER_TYPE_PROFILES[typeGuess].label : "?"} + adjustment "${a}"`,
+        correct: `${profile.label} + adjustment "${profile.adjustment}"`,
+        detail: [
+          `Actual archetype: ${profile.label} (VPIP ${profile.vpip}% / PFR ${profile.pfr}% / AF ${profile.af})`,
+          `Tell: ${profile.tell}`,
+        ],
+      },
     });
   };
 

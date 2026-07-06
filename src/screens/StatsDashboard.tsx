@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { CATEGORY_ORDER, MODE_BY_ID, TRAINING_MODES, TrainingMode } from "@/types/training";
+import { CATEGORY_ORDER, MODE_BY_ID, ROUTES, TRAINING_MODES, TrainingMode } from "@/types/training";
 import { useProgressStore } from "@/store/progress";
 import { levelFrom, MAX_STARS, starRating, totalStars } from "@/lib/progression";
 import { ACHIEVEMENTS, dailyChallengeMode } from "@/lib/achievements";
@@ -37,7 +37,15 @@ export function StatsDashboard() {
   const ctx = { stats, mistakes };
 
   return (
-    <PageShell title="Statistics Dashboard" subtitle="Your accuracy, streaks, biggest leak and progress.">
+    <PageShell
+      title="Statistics Dashboard"
+      subtitle="Your accuracy, streaks, biggest leak and progress."
+      actions={
+        <Link to={ROUTES.audit} className="btn-ghost px-3 py-2 text-sm">
+          Audit log &rarr;
+        </Link>
+      }
+    >
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Stat label="Level" value={`${level.level} · ${level.title}`} />
         <Stat label="Stars" value={`${stars} ★`} />

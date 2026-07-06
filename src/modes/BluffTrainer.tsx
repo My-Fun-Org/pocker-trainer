@@ -86,9 +86,15 @@ export function BluffTrainer() {
     recordResult({
       mode: TrainingMode.Bluff,
       correct,
-      mistake: correct
-        ? undefined
-        : { prompt: `Bluff vs ${profile.label}`, chosen: id, correct: scenario.correct },
+      audit: {
+        prompt: `River bluff vs ${profile.label}: bet ${scenario.betBB} BB into ${scenario.potBB} BB`,
+        chosen: id,
+        correct: scenario.correct,
+        detail: [
+          `Hero: ${scenario.hole.map((c) => `${c.rank}${c.suit}`).join(" ")} | Board: ${scenario.board.map((c) => `${c.rank}${c.suit}`).join(" ")}`,
+          `Break-even fold ${scenario.requiredFold.toFixed(0)}% vs estimated ${profile.label} fold ${scenario.estimatedFold}%`,
+        ],
+      },
     });
   };
 

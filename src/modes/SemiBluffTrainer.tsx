@@ -106,12 +106,20 @@ export function SemiBluffTrainer() {
     if (choice) return;
     setChoice(id);
     const correct = id === scenario.correct;
+    const fmt = (cs: Card[]) => cs.map((c) => `${c.rank}${c.suit}`).join(" ");
     recordResult({
       mode: TrainingMode.SemiBluff,
       correct,
-      mistake: correct
-        ? undefined
-        : { prompt: DRAW_LABEL[scenario.drawType], chosen: id, correct: scenario.correct },
+      audit: {
+        prompt: `Flop: ${DRAW_LABEL[scenario.drawType]}, pot ${scenario.potBB} BB, villain bets ${scenario.betBB} BB`,
+        chosen: id,
+        correct: scenario.correct,
+        detail: [
+          `Hero: ${fmt(scenario.hole)} | Board: ${fmt(scenario.board)}`,
+          `${scenario.outs} outs, ~${scenario.equityWhenCalled}% equity when called vs ${scenario.requiredEquity.toFixed(0)}% required`,
+          `Board ${scenario.wet ? "wet" : "dry"}; assumed fold-to-raise ${ASSUMED_FOLD_TO_RAISE}%, semi-bluff score ${scenario.score.toFixed(2)}`,
+        ],
+      },
     });
   };
 

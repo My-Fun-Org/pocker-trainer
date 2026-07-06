@@ -101,9 +101,18 @@ export function RiverTrainer() {
     recordResult({
       mode: TrainingMode.River,
       correct,
-      mistake: correct
-        ? undefined
-        : { prompt: scenario.heroDesc, chosen: id, correct: scenario.correctAction },
+      audit: {
+        prompt: `${scenario.heroDesc} - ${scenario.history}`,
+        chosen: id,
+        correct: scenario.correctAction,
+        detail: [
+          `Hero: ${scenario.heroCards.join(" ")} | Board: ${scenario.board.join(" ")}`,
+          totalCombos > 0
+            ? `Villain range: ${scenario.valueCombos} value vs ${scenario.bluffCombos} bluff combos (bluff ${bluffShare.toFixed(0)}%); need ${odds.requiredEquity.toFixed(0)}% to call.`
+            : `Thin value: bet ${scenario.betBB} into ${scenario.potBB}.`,
+          scenario.explanation,
+        ],
+      },
     });
   };
 

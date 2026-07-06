@@ -103,10 +103,17 @@ export function RangeBuilderTrainer() {
       recordResult({
         mode: TrainingMode.RangeBuilder,
         correct: avg >= 0.6,
-        mistake:
-          avg >= 0.6
-            ? undefined
-            : { prompt: scenario.id, chosen: `${Math.round(avg * 100)}% match`, correct: "60%+ target match" },
+        audit: {
+          prompt: `${scenario.villainDesc} (scenario "${scenario.id}")`,
+          chosen: `${Math.round(avg * 100)}% average match across ${nextScores.length} streets`,
+          correct: "60%+ match to target range each street",
+          detail: [
+            ...scenario.streets.map(
+              (st, i) =>
+                `${st.name} [${st.board.join(" ") || "preflop"}] target: ${st.targetTokens.join(", ")} - you scored ${Math.round((nextScores[i] ?? 0) * 100)}%`,
+            ),
+          ],
+        },
       });
     }
   };
