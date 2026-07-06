@@ -15,14 +15,20 @@ interface PreflopTableProps {
   potBB?: number;
 }
 
-/** Six anchor points around the oval, index 0 = hero (bottom center). */
+/**
+ * Six anchor points around the oval, index 0 = hero (bottom center). Seats are
+ * filled in action order, so the anchors run clockwise: the seat that acts right
+ * after hero sits to hero's left (bottom-left), then up the left side, across the
+ * top, and down the right side. That keeps the dealer to hero's right and the
+ * blinds to hero's left, matching how a real Texas Hold'em table plays.
+ */
 const ANCHORS: { top: number; left: number }[] = [
   { top: 87, left: 50 },
-  { top: 68, left: 87 },
-  { top: 27, left: 85 },
-  { top: 8, left: 50 },
-  { top: 27, left: 15 },
   { top: 68, left: 13 },
+  { top: 27, left: 15 },
+  { top: 8, left: 50 },
+  { top: 27, left: 85 },
+  { top: 68, left: 87 },
 ];
 
 const STATE_CLASS: Record<SeatState, string> = {
