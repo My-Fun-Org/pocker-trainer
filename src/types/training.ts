@@ -369,4 +369,5 @@ export const ROUTES = {
   home: "/",
   stats: "/stats",
   audit: "/audit",
+  shuffle: "/train/shuffle",
 } as const;

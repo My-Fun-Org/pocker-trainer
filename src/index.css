@@ -44,3 +44,10 @@ body {
     @apply rounded-2xl bg-white/5 ring-1 ring-white/10 backdrop-blur-sm;
   }
 }
+
+/* In Shuffle mode a trainer's own full-width "next" button is hidden - the
+   sticky shuffle bar owns advancing to the next random section. Submit buttons
+   (e.g. "Check answer") are plain .btn-primary without w-full, so they stay. */
+[data-shuffle] .btn-primary.w-full {
+  display: none;
+}

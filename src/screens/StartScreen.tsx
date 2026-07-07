@@ -52,6 +52,23 @@ export function StartScreen() {
         </div>
       </header>
 
+      <Link
+        to={ROUTES.shuffle}
+        className="mb-8 flex flex-col items-start gap-3 rounded-2xl bg-gradient-to-r from-chip-gold/25 to-chip-gold/5 p-5 ring-1 ring-chip-gold/40 transition-transform hover:-translate-y-0.5 hover:ring-chip-gold/70 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <div className="flex items-center gap-4">
+          <span className="text-3xl">🔀</span>
+          <div>
+            <p className="text-lg font-bold text-white">Shuffle drill</p>
+            <p className="text-sm text-white/70">
+              A mixed workout - one spot at a time, jumping between sections scaled
+              to your level. Answer, then move to the next.
+            </p>
+          </div>
+        </div>
+        <span className="btn-primary shrink-0">Start shuffle &rarr;</span>
+      </Link>
+
       <div className="mb-8 grid gap-4 md:grid-cols-3">
         <div className="card-surface flex flex-col justify-between p-5">
           <div>
